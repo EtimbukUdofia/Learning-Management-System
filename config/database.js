@@ -13,17 +13,27 @@ const connectDB = async () => {
     logger.info('🔗 Attempting MongoDB connection...');
     logger.info(`📍 Connection string configured (credentials hidden for security)`);
     
-    const conn = await mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+    // Mongoose client options with Stable API version
+    const clientOptions = { 
+      serverApi: { 
+        version: '1', 
+        strict: true, 
+        deprecationErrors: true 
+      },
       maxPoolSize: 10,
       minPoolSize: 2,
       maxIdleTimeMS: 45000,
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
-    });
+    };
+    
+    const conn = await mongoose.connect(mongoUri, clientOptions);
+    
+    // Ping deployment to verify connection
+    await mongoose.connection.db.admin().command({ ping: 1 });
 
     logger.info('✅ MongoDB connected successfully');
+    logger.info('✅ Pinged your deployment. You successfully connected to MongoDB!');
     logger.info(`📊 Database: ${conn.connection.db.databaseName}`);
     logger.info(`🔗 Host: ${conn.connection.host}`);
 

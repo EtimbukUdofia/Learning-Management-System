@@ -1,10 +1,11 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const paystackService = require('../services/paystack.service');
 const Course = require('../models/Course.model');
 const { Order, Coupon, Enrollment, Payout } = require('../models/index');
 const { AppError } = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const notificationService = require('../services/notification.service');
 const emailService = require('../services/email.service');
+const { v4: uuidv4 } = require('uuid');
 
 const INSTRUCTOR_SHARE = parseFloat(process.env.INSTRUCTOR_REVENUE_SHARE || 70) / 100;
 
@@ -42,7 +43,7 @@ exports.createCheckout = catchAsync(async (req, res) => {
     appliedCoupon = coupon;
   }
 
-  // Free course enrollment — bypass Stripe
+  // Free course enrollment — bypass Paystack
   if (finalPrice === 0) {
     const order = await Order.create({
       student: req.user._id,
@@ -62,28 +63,18 @@ exports.createCheckout = catchAsync(async (req, res) => {
     return res.json({ success: true, message: 'Enrolled for free!', data: { order, enrolled: true } });
   }
 
-  // Stripe session
-  const session = await stripe.checkout.sessions.create({
-    mode: 'payment',
-    customer_email: req.user.email,
-    line_items: [{
-      price_data: {
-        currency: course.currency?.toLowerCase() || 'usd',
-        product_data: {
-          name: course.title,
-          images: course.thumbnail?.url ? [course.thumbnail.url] : [],
-          metadata: { courseId: courseId.toString(), instructorId: course.instructor._id.toString() },
-        },
-        unit_amount: Math.round(finalPrice * 100), // Stripe uses cents
-      },
-      quantity: 1,
-    }],
-    discounts: discount > 0 ? [] : undefined, // handled manually
-    success_url: `${process.env.FRONTEND_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.FRONTEND_URL}/course/${course.slug}`,
+  // Initialize Paystack transaction
+  const reference = `ORDER-${req.user._id}-${uuidv4()}`;
+
+  const paystackResponse = await paystackService.initializeTransaction({
+    email: req.user.email,
+    amount: finalPrice,
+    reference,
     metadata: {
       userId: req.user._id.toString(),
       courseId: courseId.toString(),
+      courseTitle: course.title,
+      instructorId: course.instructor._id.toString(),
       couponId: appliedCoupon?._id?.toString() || '',
       discount: discount.toString(),
     },
@@ -99,67 +90,96 @@ exports.createCheckout = catchAsync(async (req, res) => {
     coupon: appliedCoupon?._id,
     couponCode: appliedCoupon?.code,
     status: 'pending',
-    stripeSessionId: session.id,
+    paystackReference: reference,
+    paymentProvider: 'paystack',
   });
 
-  res.json({ success: true, data: { sessionId: session.id, sessionUrl: session.url } });
+  res.json({ 
+    success: true, 
+    data: { 
+      reference,
+      authorizationUrl: paystackResponse.data.authorization_url,
+      accessCode: paystackResponse.data.access_code,
+    } 
+  });
 });
 
-// ─── Stripe Webhook ───────────────────────────────────────────────────────────
-exports.stripeWebhook = catchAsync(async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
+// ─── Paystack Webhook ─────────────────────────────────────────────────────────
+exports.paystackWebhook = catchAsync(async (req, res) => {
+  const event = req.body;
 
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-  } catch (err) {
-    return res.status(400).json({ error: `Webhook Error: ${err.message}` });
+  // Verify webhook signature (Paystack sends as query param)
+  const secret = process.env.PAYSTACK_SECRET_KEY;
+  const hash = require('crypto')
+    .createHmac('sha512', secret)
+    .update(JSON.stringify(event))
+    .digest('hex');
+
+  if (hash !== req.headers['x-paystack-signature']) {
+    logger.warn('⚠️  Invalid Paystack webhook signature');
+    return res.status(401).json({ error: 'Invalid signature' });
   }
 
-  switch (event.type) {
-    case 'checkout.session.completed': {
-      const session = event.data.object;
-      const { userId, courseId, couponId, discount } = session.metadata;
+  // Handle payment.success event
+  if (event.event === 'charge.success') {
+    const { reference, amount, customer } = event.data;
 
-      const order = await Order.findOneAndUpdate(
-        { stripeSessionId: session.id },
-        { status: 'completed', stripePaymentIntentId: session.payment_intent },
-        { new: true }
-      );
+    const order = await Order.findOneAndUpdate(
+      { paystackReference: reference },
+      { 
+        status: 'completed', 
+        paystackTransactionId: event.data.id,
+        paidAt: new Date(),
+      },
+      { new: true }
+    ).populate('courses.course');
 
-      if (order && order.status === 'completed') {
+    if (order && order.status === 'completed') {
+      const courseId = order.courses[0].course._id;
+      const userId = order.student;
+
+      // Create enrollment
+      const existingEnrollment = await Enrollment.findOne({ student: userId, course: courseId });
+      if (!existingEnrollment) {
         await Enrollment.create({ student: userId, course: courseId, order: order._id });
-
-        if (couponId) await Coupon.findByIdAndUpdate(couponId, { $inc: { usedCount: 1 } });
-
-        const user = await require('../models/User.model').findById(userId);
-        const course = await Course.findById(courseId).populate('instructor');
-
-        await notificationService.send({
-          userId,
-          type: 'payment',
-          title: 'Enrollment Confirmed!',
-          message: `You're now enrolled in "${course.title}"`,
-          data: { courseId, orderId: order._id },
-        });
-
-        await emailService.sendEnrollmentConfirmation(user.email, user.name, course.title);
       }
-      break;
-    }
 
-    case 'charge.dispute.created': {
-      const charge = event.data.object;
-      const order = await Order.findOne({ stripePaymentIntentId: charge.payment_intent });
-      if (order) {
-        order.status = 'refunded';
-        await order.save();
+      // Apply coupon usage
+      if (order.coupon) {
+        await Coupon.findByIdAndUpdate(order.coupon, { $inc: { usedCount: 1 } });
       }
-      break;
+
+      const user = await require('../models/User.model').findById(userId);
+      const course = await Course.findById(courseId).populate('instructor');
+
+      // Send notifications
+      await notificationService.send({
+        userId,
+        type: 'payment',
+        title: 'Enrollment Confirmed!',
+        message: `You're now enrolled in "${course.title}"`,
+        data: { courseId, orderId: order._id },
+      });
+
+      await emailService.sendEnrollmentConfirmation(user.email, user.name, course.title);
+
+      logger.info(`✅ Payment confirmed for order: ${order._id}`);
     }
   }
 
-  res.json({ received: true });
+  // Handle charge.dispute event (refund/dispute)
+  if (event.event === 'charge.dispute.create') {
+    const { reference } = event.data;
+    const order = await Order.findOne({ paystackReference: reference });
+    
+    if (order) {
+      order.status = 'disputed';
+      await order.save();
+      logger.warn(`⚠️  Payment dispute created for order: ${order._id}`);
+    }
+  }
+
+  res.json({ success: true, message: 'Webhook received' });
 });
 
 // ─── Order History ────────────────────────────────────────────────────────────
@@ -181,8 +201,11 @@ exports.requestRefund = catchAsync(async (req, res) => {
   const daysSincePurchase = (Date.now() - order.createdAt) / (1000 * 60 * 60 * 24);
   if (daysSincePurchase > 30) throw new AppError('Refund window has expired (30 days)', 400);
 
-  if (order.stripePaymentIntentId) {
-    await stripe.refunds.create({ payment_intent: order.stripePaymentIntentId });
+  // Process refund via Paystack
+  if (order.paystackReference) {
+    await paystackService.refundPayment(order.paystackReference, {
+      amount: order.total,
+    });
   }
 
   order.status = 'refunded';

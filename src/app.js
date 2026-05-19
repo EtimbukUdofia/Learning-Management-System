@@ -106,8 +106,8 @@ app.set('io', io);
 app.use(helmet({ crossOriginEmbedderPolicy: false }));
 app.use(cors({ origin: process.env.FRONTEND_URL || '*', credentials: true, methods: ['GET','POST','PUT','DELETE','PATCH','OPTIONS'] }));
 
-// Stripe webhook needs raw body — MUST be before express.json()
-app.use('/api/v1/payments/webhooks/stripe', express.raw({ type: 'application/json' }));
+// Paystack webhook needs raw body — MUST be before express.json()
+app.use('/api/v1/payments/webhooks/paystack', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(mongoSanitize());
@@ -215,19 +215,28 @@ if (!mongoUri) {
   process.exit(1);
 }
 
-mongoose.connect(mongoUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// Mongoose client options with Stable API version
+const clientOptions = { 
+  serverApi: { 
+    version: '1', 
+    strict: true, 
+    deprecationErrors: true 
+  },
   maxPoolSize: 10,
   minPoolSize: 2,
   maxIdleTimeMS: 45000,
   serverSelectionTimeoutMS: 10000,
   socketTimeoutMS: 45000,
-})
-  .then(() => {
+};
+
+mongoose.connect(mongoUri, clientOptions)
+  .then(async (conn) => {
+    // Ping deployment to verify connection
+    await mongoose.connection.db.admin().command({ ping: 1 });
     logger.info('✅ MongoDB connected successfully');
-    logger.info(`📊 Database: ${mongoose.connection.db.databaseName}`);
-    logger.info(`🔗 Host: ${mongoose.connection.host}`);
+    logger.info('✅ Pinged your deployment. You successfully connected to MongoDB!');
+    logger.info(`📊 Database: ${conn.connection.db.databaseName}`);
+    logger.info(`🔗 Host: ${conn.connection.host}`);
     
     server.listen(PORT, () => {
       logger.info(`🚀 LMS API running → http://localhost:${PORT}`);

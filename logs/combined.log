@@ -82,3 +82,116 @@
 [2026-05-08 14:57:41] [32minfo[39m: Environment: development
 [2026-05-13 09:02:20] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
 [2026-05-13 09:02:31] [33mwarn[39m: ⚠️  MongoDB disconnected
+[2026-05-19 10:17:26] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 10:17:30] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 10:17:30] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 10:17:30] [32minfo[39m: 📊 Database: test
+[2026-05-19 10:17:30] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-02.f0iappj.mongodb.net
+[2026-05-19 10:17:30] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 10:17:30] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 10:17:30] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 10:17:30] [32minfo[39m: Environment: development
+[2026-05-19 11:15:31] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 11:15:34] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 11:15:34] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 11:15:34] [32minfo[39m: 📊 Database: test
+[2026-05-19 11:15:34] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-02.f0iappj.mongodb.net
+[2026-05-19 11:15:34] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 11:15:34] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 11:15:34] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 11:15:34] [32minfo[39m: Environment: development
+[2026-05-19 11:15:37] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 11:15:43] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 11:15:49] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 11:15:53] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 11:15:53] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 11:15:53] [32minfo[39m: 📊 Database: test
+[2026-05-19 11:15:53] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-00.f0iappj.mongodb.net
+[2026-05-19 11:15:53] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 11:15:53] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 11:15:53] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 11:15:53] [32minfo[39m: Environment: development
+[2026-05-19 11:15:57] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 11:16:02] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 11:16:05] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 11:16:09] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 11:16:09] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 11:16:09] [32minfo[39m: 📊 Database: test
+[2026-05-19 11:16:09] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-02.f0iappj.mongodb.net
+[2026-05-19 11:16:09] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 11:16:09] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 11:16:09] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 11:16:09] [32minfo[39m: Environment: development
+[2026-05-19 11:17:12] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 11:17:16] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 11:17:16] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 11:17:16] [32minfo[39m: 📊 Database: test
+[2026-05-19 11:17:16] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-02.f0iappj.mongodb.net
+[2026-05-19 11:17:16] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 11:17:16] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 11:17:16] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 11:17:16] [32minfo[39m: Environment: development
+[2026-05-19 11:17:51] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 11:17:56] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 11:17:56] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 11:17:56] [32minfo[39m: 📊 Database: test
+[2026-05-19 11:17:56] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-00.f0iappj.mongodb.net
+[2026-05-19 11:17:56] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 11:17:56] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 11:17:56] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 11:17:56] [32minfo[39m: Environment: development
+[2026-05-19 12:21:13] [33mwarn[39m: ⚠️  MongoDB disconnected
+[2026-05-19 12:21:24] [32minfo[39m: ✅ MongoDB reconnected
+[2026-05-19 12:36:52] [33mwarn[39m: ⚠️  MongoDB disconnected
+[2026-05-19 12:38:16] [32minfo[39m: ✅ MongoDB reconnected
+[2026-05-19 12:43:39] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 12:43:42] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 12:43:42] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 12:43:42] [32minfo[39m: 📊 Database: test
+[2026-05-19 12:43:42] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-00.f0iappj.mongodb.net
+[2026-05-19 12:43:42] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 12:43:42] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 12:43:42] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 12:43:42] [32minfo[39m: Environment: development
+[2026-05-19 12:43:56] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 12:43:59] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 12:43:59] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 12:43:59] [32minfo[39m: 📊 Database: test
+[2026-05-19 12:43:59] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-01.f0iappj.mongodb.net
+[2026-05-19 12:43:59] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 12:43:59] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 12:43:59] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 12:43:59] [32minfo[39m: Environment: development
+[2026-05-19 12:44:28] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 12:44:32] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 12:44:32] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 12:44:32] [32minfo[39m: 📊 Database: test
+[2026-05-19 12:44:32] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-00.f0iappj.mongodb.net
+[2026-05-19 12:44:32] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 12:44:32] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 12:44:32] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 12:44:32] [32minfo[39m: Environment: development
+[2026-05-19 12:44:48] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 12:44:52] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 12:44:52] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 12:44:52] [32minfo[39m: 📊 Database: test
+[2026-05-19 12:44:52] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-01.f0iappj.mongodb.net
+[2026-05-19 12:44:52] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 12:44:52] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 12:44:52] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 12:44:52] [32minfo[39m: Environment: development
+[2026-05-19 12:44:56] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-19 12:45:01] [32minfo[39m: ✅ MongoDB connected successfully
+[2026-05-19 12:45:01] [32minfo[39m: ✅ Pinged your deployment. You successfully connected to MongoDB!
+[2026-05-19 12:45:01] [32minfo[39m: 📊 Database: test
+[2026-05-19 12:45:01] [32minfo[39m: 🔗 Host: ac-kzie4bo-shard-00-00.f0iappj.mongodb.net
+[2026-05-19 12:45:01] [32minfo[39m: 🚀 LMS API running → http://localhost:5000
+[2026-05-19 12:45:01] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
+[2026-05-19 12:45:01] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
+[2026-05-19 12:45:01] [32minfo[39m: Environment: development
+[2026-05-19 12:45:51] [33mwarn[39m: ⚠️  MongoDB disconnected
+[2026-05-19 12:46:02] [32minfo[39m: ✅ MongoDB reconnected
+[2026-05-19 13:13:34] [33mwarn[39m: ⚠️  MongoDB disconnected
+[2026-05-19 13:14:17] [32minfo[39m: ✅ MongoDB reconnected
+[2026-05-19 13:35:32] [33mwarn[39m: ⚠️  MongoDB disconnected
+[2026-05-19 15:31:08] [32minfo[39m: ✅ MongoDB reconnected

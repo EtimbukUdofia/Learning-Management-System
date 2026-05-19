@@ -2,19 +2,39 @@
 const express = require('express');
 const payRouter = express.Router();
 const payCtrl = require('../controllers/payment.controller');
+const paystackService = require('../services/paystack.service');
 const { protect, restrictTo } = require('../middlewares/auth.middleware');
 const { body } = require('express-validator');
 const validate = require('../middlewares/validate.middleware');
+const logger = require('../utils/logger');
+const { Order } = require('../models/index');
 
 payRouter.post('/payments/checkout', protect, [body('courseId').notEmpty()], validate, payCtrl.createCheckout);
-payRouter.get('/payments/checkout/:sessionId', protect, (req, res) => {
-  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-  stripe.checkout.sessions.retrieve(req.params.sessionId)
-    .then(s => res.json({ success: true, data: { status: s.payment_status, sessionId: s.id } }))
-    .catch(() => res.status(404).json({ success: false, message: 'Session not found' }));
+
+// ─── Verify Paystack Payment ──────────────────────────────────────────────────
+payRouter.get('/payments/verify/:reference', protect, async (req, res, next) => {
+  try {
+    const verification = await paystackService.verifyTransaction(req.params.reference);
+    
+    res.json({ 
+      success: verification.data.status === 'success',
+      data: { 
+        status: verification.data.status, 
+        reference: req.params.reference,
+        amount: verification.data.amount / 100, // Convert from kobo
+      } 
+    });
+  } catch (error) {
+    logger.error('Payment verification failed:', error.message);
+    res.status(404).json({ success: false, message: 'Payment verification failed' });
+  }
 });
-payRouter.post('/payments/webhooks/stripe', payCtrl.stripeWebhook);
+
+// ─── Paystack Webhook ─────────────────────────────────────────────────────────
+payRouter.post('/payments/webhooks/paystack', payCtrl.paystackWebhook);
+
 payRouter.get('/payments/orders', protect, payCtrl.getOrders);
+
 payRouter.get('/payments/orders/:orderId', protect, async (req, res, next) => {
   try {
     const { Order } = require('../models/index');
@@ -24,6 +44,7 @@ payRouter.get('/payments/orders/:orderId', protect, async (req, res, next) => {
     res.json({ success: true, data: order });
   } catch (err) { next(err); }
 });
+
 payRouter.post('/payments/orders/:orderId/refund', protect, payCtrl.requestRefund);
 payRouter.get('/payments/orders/:orderId/invoice', protect, async (req, res, next) => {
   try {

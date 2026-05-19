@@ -765,9 +765,16 @@ All documentation consolidated in this README.md file:
 | Troubleshooting | Common issues & solutions |
 | Verification | Quality checklist |
 
----
+### 🔌 Integration Guides
 
-## 🎓 Next Steps
+**Complete integration documentation available for:**
+
+1. **Auth0 Integration** - Machine-to-Machine authentication, token management, authenticated API requests
+2. **Auth0 Quick Start** - Copy-paste examples, 6 integration patterns, service templates
+3. **Paystack Payment** - Payment processing, webhooks, refunds, bank transfers
+4. **Paystack Quick Start** - Frontend examples, verification workflow, refund requests
+
+---
 
 1. **Read this README** - Understand what's been added
 2. **Install dependencies** - `npm install node-cron@3.0.3 bull@4.11.5`
